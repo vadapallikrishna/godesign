@@ -3,23 +3,23 @@ package main
 
 
 type Parser interface {
-    func kindOf() SyntaxKind
-    func nextOf() SyntaxKind
-    func returnOf() SyntaxKind
+    func kindOf(t Token) SyntaxKind
+    func nextOf(t Token) SyntaxKind
+    func iserror(s SyntaxKind) ErrorKind
+    func check(s SyntaxKind) 
 }
-
 
 
 type SyntaxKind struct {
     tokentype string
+    nexttoken string
+}
 
+type ErrorKind struct {
+    expectedtype string
 }
 
 
-func (p Parser) parseComment() {
-
-
-}
 
 func (p Parser) kindOf(t Token) SyntaxKind {
 
@@ -27,24 +27,33 @@ func (p Parser) kindOf(t Token) SyntaxKind {
 
     if t.lexeme == "var" {
 	kind.tokentype = "keyword"
+	kind.nexttoken = "identifier"
     } else if t.lexeme == "const" {
         kind.tokentype = "keyword"
+	kind.nexttoken = "identifier"
     } else if t.lexeme == "func" {
         kind.tokentype = "keyword"
     } else if t.lexeme == "type" {
         kind.tokentype = "keyword"
+	kind.tokentype = "identifier"
     } else if t.lexeme == "interface" {
         kind.tokentype = "keyword"
+	kind.nexttoken = "{"
     } else if t.lexeme == "struct" {
         kind.tokentype = "keyword"
+	kind.nexttoken = "{"
     } else if t.lexeme == "import" {
        kind.tokentype = "keyword"
+       kind.nexttoken = "("
     } else if t.lexeme == "package" {
        kind.tokentype = "keyword"
+       kind.nexttoken = "identifier"
     } else if t.lexeme == "if" {
        kind.tokentype = "keyword"
+       kind.nexttoken = "identifier"
     } else if t.lexeme == "else" {
        kind.tokentype = "keyword"
+       kind.nexttoken = "identifier"
     } else if t.lexeme == "switch" {
        kind.tokentype = "keyword"
     } else if t.lexeme == "goto" {
@@ -84,22 +93,27 @@ func (p Parser) kindOf(t Token) SyntaxKind {
 }
 
 func (p Parser) nextOf(t Token) SyntaxKind {
+     var kind, nextkind SyntaxKind
+
+     kind := kindOf(t)
+     if kind.tokentype == "keyword" {
+         if kind.nexttoken == "identifier" {
+	     nextkind.tokentype = "identifier"
+	     return nextkind
+	 }
+     }
 
 
 }
 
-func (p Parser) returnOf(t Token) SyntaxKind {
-    if p.kindOf(t) !=  {
-        return nextOf(t)
+func (p Parser) iserror(s SyntaxKind) ErrorKind {
+
+}
+
+func (p Parser) check(s SyntaxKind)  {
+    if s.tokentype != p.iserror(s) {
+	return  
     } else {
         panic("Error parsing current Token")
     }
-}
-
-
-
-
-func (p Parser) parse(s Scanner) {
-        token := s.nextToken()
-	return result(token)
 }
