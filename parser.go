@@ -6,7 +6,8 @@ type Parser interface {
     func kindOf(t Token) SyntaxKind
     func nextOf(t Token) SyntaxKind
     func iserror(s SyntaxKind) ErrorKind
-    func check(s SyntaxKind) 
+    func check(s SyntaxKind) SyntaxKind
+    func parse(s SyntaxKind)
 }
 
 
@@ -110,10 +111,14 @@ func (p Parser) iserror(s SyntaxKind) ErrorKind {
 
 }
 
-func (p Parser) check(s SyntaxKind)  {
+func (p Parser) check(s SyntaxKind) SyntaxKind  {
     if s.tokentype != p.iserror(s) {
-	return  
+	return parse(s)
     } else {
         panic("Error parsing current Token")
     }
+}
+
+func (p Parser) parse(s SyntaxKind) {
+    return nextOf(s)
 }
