@@ -103,12 +103,14 @@ func (p Parser) nextOf(t Token) SyntaxKind {
 	     return nextkind
 	 }
      }
-
-
 }
 
 func (p Parser) iserror(s SyntaxKind) ErrorKind {
-
+    var actual SyntaxKind
+    actual = p.kindOf(scanner.nextToken)
+    var err ErrorKind
+    err.expectedtype = actual.tokentype
+    return err
 }
 
 func (p Parser) check(s SyntaxKind) SyntaxKind  {
