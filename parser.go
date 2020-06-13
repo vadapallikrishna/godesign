@@ -1,126 +1,52 @@
 package main
 
-
+import "fmt"
 
 type Parser interface {
     func kindOf(t Token) SyntaxKind
     func nextOf(t Token) SyntaxKind
-    func iserror(s SyntaxKind) ErrorKind
-    func check(s SyntaxKind) SyntaxKind
-    func parse(s SyntaxKind)
+    func isError(s SyntaxKind) error
+    func check(s SyntaxKind) NodeKind
+    func parse(s SyntaxKind) NodeKind
+
 }
 
-
 type SyntaxKind struct {
-    tokentype string
-    nexttoken string
+
 }
 
 type ErrorKind struct {
-    expectedtype string
+
 }
 
+type NodeKind struct {
 
+}
 
 func (p Parser) kindOf(t Token) SyntaxKind {
-
     var kind SyntaxKind
-
-    if t.lexeme == "var" {
-	kind.tokentype = "keyword"
-	kind.nexttoken = "identifier"
-    } else if t.lexeme == "const" {
-        kind.tokentype = "keyword"
-	kind.nexttoken = "identifier"
-    } else if t.lexeme == "func" {
-        kind.tokentype = "keyword"
-    } else if t.lexeme == "type" {
-        kind.tokentype = "keyword"
-	kind.tokentype = "identifier"
-    } else if t.lexeme == "interface" {
-        kind.tokentype = "keyword"
-	kind.nexttoken = "{"
-    } else if t.lexeme == "struct" {
-        kind.tokentype = "keyword"
-	kind.nexttoken = "{"
-    } else if t.lexeme == "import" {
-       kind.tokentype = "keyword"
-       kind.nexttoken = "("
-    } else if t.lexeme == "package" {
-       kind.tokentype = "keyword"
-       kind.nexttoken = "identifier"
-    } else if t.lexeme == "if" {
-       kind.tokentype = "keyword"
-       kind.nexttoken = "identifier"
-    } else if t.lexeme == "else" {
-       kind.tokentype = "keyword"
-       kind.nexttoken = "identifier"
-    } else if t.lexeme == "switch" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "goto" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "case" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "break" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "chan" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "continue" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "default" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "defer" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "fallthrough" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "for" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "go" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "map" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "range" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "return" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "select" {
-       kind.tokentype = "keyword"
-    } else if t.lexeme == "type" {
-       kind.tokentype = "keyword"
-    }
-
     return kind
 
 }
 
 func (p Parser) nextOf(t Token) SyntaxKind {
      var kind, nextkind SyntaxKind
-
-     kind := kindOf(t)
-     if kind.tokentype == "keyword" {
-         if kind.nexttoken == "identifier" {
-	     nextkind.tokentype = "identifier"
-	     return nextkind
-	 }
-     }
 }
 
-func (p Parser) iserror(s SyntaxKind) ErrorKind {
-    var actual SyntaxKind
-    actual = p.kindOf(scanner.nextToken)
-    var err ErrorKind
-    err.expectedtype = actual.tokentype
-    return err
+func (p Parser) isError(s SyntaxKind) error {
+
 }
 
-func (p Parser) check(s SyntaxKind) SyntaxKind  {
-    if s.tokentype != p.iserror(s) {
-	return parse(s)
+func (p Parser) check(s SyntaxKind) NodeKind  {
+    err := p.iserror(s)
+    if err != nil {
+        fmt.println(err)
     } else {
-        panic("Error parsing current Token")
+	return parse(s)
     }
 }
 
-func (p Parser) parse(s SyntaxKind) {
-    return nextOf(s)
+func (p Parser) parse(s SyntaxKind) NodeKind {
+    var r ResultNode
 }
+
